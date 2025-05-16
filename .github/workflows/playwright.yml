@@ -35,3 +35,32 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+  
+  load-test:
+    name: 📈 Run k6 Load Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🌐 Install k6
+        run: |
+          sudo apt update
+          sudo apt install -y gnupg software-properties-common
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 33EFDABB
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt update
+          sudo apt install -y k6
+
+      - name: 🚀 Run k6 Load Test
+        run: k6 run load-tests/search.k6.js
+
+      - name: 📊 Upload k6 Output (Optional)
+        if: always()
+        run: k6 run --out json=k6-result.json load-tests/search.k6.js
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: k6-load-test-report
+          path: k6-result.json
