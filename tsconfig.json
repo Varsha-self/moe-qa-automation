@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",               // important for absolute paths
+    "paths": {
+      "*": ["*", "pages/*", "tests/*"]
+    }
+  },
+  "include": ["pages", "tests"]
+}

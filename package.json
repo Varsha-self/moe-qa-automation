@@ -1,0 +1,16 @@
+{
+  "name": "moe-qa-automation",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:e2e": "npx playwright test --grep @e2e",
+    "test:regression": "npx playwright test --grep @regression",
+    "report": "npx playwright show-report",
+    "perf:search": "k6 run load-tests/search.k6.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "typescript": "^5.3.3"
+  }
+}
