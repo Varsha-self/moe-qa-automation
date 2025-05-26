@@ -10,6 +10,7 @@
     "perf:search": "k6 run load-tests/search.k6.js"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
     "@playwright/test": "^1.43.1",
     "typescript": "^5.3.3"
   }
