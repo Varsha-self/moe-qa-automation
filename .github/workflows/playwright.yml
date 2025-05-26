@@ -1,4 +1,4 @@
-name: 🧪 Playwright CI - Split by Tags 
+name: 🧪 Playwright + k6 CI Pipeline
 
 on:
   push:
@@ -7,8 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  test-suite:
-    name: Run Playwright Tests - ${{ matrix.suite }}
+  # 🧪 UI Tests: Playwright (smoke, e2e, regression)
+  ui-tests:
+    name: Run Playwright @${{ matrix.suite }} Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,20 +17,20 @@ jobs:
 
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v3
 
       - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.8.1
         with:
           node-version: '18'
 
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🧱 Install Playwright
+      - name: 🧱 Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: 🚀 Run ${{ matrix.suite }} tests
+      - name: 🚀 Run @${{ matrix.suite }} tests
         run: npx playwright test --grep @${{ matrix.suite }}
 
       - name: 📎 Upload HTML report on failure
@@ -39,14 +40,14 @@ jobs:
           name: playwright-report-${{ matrix.suite }}
           path: playwright-report/
 
-  
-  load-test:
-    name: 📈 Run k6 Load Test
+  # 📈 Performance Test: k6 Load Test
+  perf-test:
+    name: Run k6 Load Test
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repo
-        uses: actions/checkout@v3.5.3
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
 
       - name: 🌐 Install k6
         run: |
@@ -58,13 +59,10 @@ jobs:
           sudo apt install -y k6
 
       - name: 🚀 Run k6 Load Test
-        run: k6 run load-tests/search.k6.js
-
-      - name: 📊 Upload k6 Output (Optional)
-        if: always()
         run: k6 run --out json=k6-result.json load-tests/search.k6.js
 
-      - uses: actions/upload-artifact@v4
+      - name: 📎 Upload k6 result report
+        uses: actions/upload-artifact@v4
         with:
-          name: k6-load-test-report
+          name: k6-result
           path: k6-result.json
