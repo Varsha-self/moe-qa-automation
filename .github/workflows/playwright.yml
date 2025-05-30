@@ -42,27 +42,21 @@ jobs:
 
   # 📈 Performance Test: k6 Load Test
   perf-test:
-    name: Run k6 Load Test
+    name: 🧪 Run k6 Load Test
     runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v3
 
-      - name: 🌐 Install k6
+      - name: 🐳 Run k6 with Docker
         run: |
-          sudo apt update
-          sudo apt install -y gnupg software-properties-common
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 33EFDABB
-          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt update
-          sudo apt install -y k6
+          docker run --rm -v ${{ github.workspace }}:/scripts grafana/k6 run /scripts/load-tests/search.k6.js
 
-      - name: 🚀 Run k6 Load Test
-        run: k6 run --out json=k6-result.json load-tests/search.k6.js
-
-      - name: 📎 Upload k6 result report
+      - name: 📎 Upload k6 result (optional)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: k6-result
           path: k6-result.json
+
