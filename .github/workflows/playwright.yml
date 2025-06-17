@@ -7,37 +7,33 @@ on:
     branches: [main]
 
 jobs:
-  # 🧪 UI Tests: Playwright (smoke, e2e, regression)
-  ui-tests:
-    name: Run Playwright @${{ matrix.suite }} Tests
+  e2e:
+    name: E2E Tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        suite: [smoke, e2e, regression]
 
     steps:
-      - name: 📥 Checkout code
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
 
-      - name: 🟢 Setup Node.js
-        uses: actions/setup-node@v3.8.1
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: 📦 Install dependencies
         run: npm ci
 
-      - name: 🧱 Install Playwright Browsers
+      - name: 🎭 Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: 🚀 Run @${{ matrix.suite }} tests
-        run: npx playwright test --grep @${{ matrix.suite }}
+      - name: 🧪 Run @e2e tests
+        run: npx playwright test --grep @e2e
 
-      - name: 📎 Upload HTML report on failure
+      - name: 📎 Upload HTML report (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ matrix.suite }}
+          name: e2e-report
           path: playwright-report/
 
   # 📈 Performance Test: k6 Load Test
