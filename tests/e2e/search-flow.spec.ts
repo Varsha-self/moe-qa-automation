@@ -1,14 +1,17 @@
-import { test, expect } from '@playwright/test';
-import { HomePage } from '../../pages/HomePage';
+import { Page, Locator } from '@playwright/test';
 
-test.describe('@e2e', () => {
-  test('User can search for a school', async ({ page }) => {
-    const home = new HomePage(page);
+export class FooterPage {
+  readonly page: Page;
 
-    await home.goto();
-    await home.performSearch('primary school');
+  constructor(page: Page) {
+    this.page = page;
+  }
 
-    await expect(page).toHaveURL(/search/);
-    await expect(home.mainContent()).toContainText(/primary/i);
-  });
-});
+  async clickFooterLink(name: string): Promise<void> {
+    await this.page.getByRole('link', { name }).click();
+  }
+
+  heading(expected: string): Locator {
+    return this.page.getByRole('heading', { name: new RegExp(expected, 'i') });
+  }
+}

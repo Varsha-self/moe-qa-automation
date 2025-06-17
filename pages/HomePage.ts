@@ -1,4 +1,3 @@
-// pages/HomePage.ts
 import { Page, Locator } from '@playwright/test';
 
 export class HomePage {
@@ -9,29 +8,20 @@ export class HomePage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto('/');
-  }
-
-
-  header(): Locator {
-    return this.page.getByRole('banner');
+    await this.page.goto('https://www.moe.gov.sg');
   }
 
   searchButton(): Locator {
-    return this.page.getByRole('button', { name: 'Search' });
+    return this.page.getByRole('button', { name: /search/i });
   }
 
   searchInput(): Locator {
-    return this.page.getByRole('textbox', { name: 'What are you searching for?' });
+    return this.page.getByRole('searchbox');
   }
 
   async performSearch(query: string): Promise<void> {
     await this.searchButton().click();
     await this.searchInput().fill(query);
     await this.page.keyboard.press('Enter');
-  }
-
-  mainContent(): Locator {
-    return this.page.getByRole('main');
   }
 }
