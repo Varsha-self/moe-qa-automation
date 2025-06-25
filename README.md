@@ -54,7 +54,7 @@
         ignoreHTTPSErrors: true
         }
 
-        Browsers tested: Chromium, Firefox, WebKit
+        Browsers tested: Chromium, Firefox
         Tag filtering: You can use @e2e or custom tags to control CI runs.
 
 📁 tsconfig.json
